@@ -6,21 +6,16 @@ let containerCircles = document.getElementById("circles");
 let containerCross = document.getElementById("crosses");
 let elementsDragables = document.getElementsByClassName("dragable");
 let elementsDropables = document.getElementsByClassName("dropTarget");
+
+let titleWin = document.getElementById("win");
+let titleTie = document.getElementById("tie");
+let buttonRestart = document.getElementById("restart");
+
 let elementsPlaced = [];
 let positionPlacedCircles = [];
 let positionPlacedCross = [];
 
-for (let i = 0; i < elementsDropables.length; i++) {
-    if(i < elementsDragables.length)
-    {
-        elementsDragables[i].addEventListener("dragstart", dragStart);
-        elementsDragables[i].addEventListener("dragend", dragEnd);
-    }
-    elementsDropables[i].addEventListener("dragenter", dragEnter)
-    elementsDropables[i].addEventListener("dragover", dragOver);
-    elementsDropables[i].addEventListener("dragleave", dragLeave);
-    elementsDropables[i].addEventListener("drop", drop);
-}
+addEvents();
 
 
 function dragStart(e) {
@@ -96,11 +91,13 @@ function drop(e) {
     let classElementDragged = e.dataTransfer.getData("text").split(" ")[1];
     let dropObjective = e.target;
     let animationSelected = "";
+    let afterAnimation = "";
+    let deleteBeforeAnimation = "";
     let gameWin = false;
-    let titleWin = document.getElementById("win");
-    let titleTie = document.getElementById("tie");
+
 
     arrow.classList = "";
+    arrow.parentNode.classList = "";
     dropObjective.classList.remove("dragOver");
     dropObjective.classList.remove("dragOverIncorrect");
     if( dropObjective.classList.contains("dropValid") 
@@ -112,36 +109,55 @@ function drop(e) {
         elementsPlaced.push(elementSelected);
         if(classTurn == "circle")
         {
-            animationSelected = "animatedArrowRigth";
+            animationSelected = "slideRigth";
+            afterAnimation = "afterRightAnimation";
+            deleteBeforeAnimation = "afterLeftAnimation"
             positionPlacedCircles.push(getPositionElement(elementSelected));
         }
         else
         {
-            animationSelected = "animatedArrowLeft";
+            animationSelected = "slideLeft";
+            afterAnimation = "afterLeftAnimation";
+            deleteBeforeAnimation = "afterRightAnimation";
             positionPlacedCross.push(getPositionElement(elementSelected));
         }
-        arrow.classList.add(animationSelected);
+        arrow.style.animation = `0.6s ease-in-out forwards running ${animationSelected}`;
+        arrow.addEventListener("animationend", () => {
+            arrow.parentNode.classList.add(afterAnimation);
+            arrow.parentNode.classList.remove(deleteBeforeAnimation);
+            arrow.style.animation = `0.8s ease-in-out infinite running jumping`;
+        });
         classTurn = (classTurn == "circle") ? "cross" : "circle";
         gameWin = checkEndGame();
     }
     elementSelected.classList.remove("hide");
     if(gameWin || elementsPlaced.length == 6)
-    {
-        if(gameWin) titleWin.classList.add("titlesVisible");	
-        if(elementsPlaced.length == 6 && !gameWin)
-            titleTie.classList.add("titlesVisible");	
-        document.getElementsByTagName("main")[0].classList.add("bluredBackground");
-        document.getElementsByTagName("header")[0].classList.add("bluredBackground");
-    }
+        gameEnd(gameWin);
+}
+
+function gameEnd(gameWin) {
+    removeEvents()
+    document.getElementsByTagName("main")[0].classList.add("bluredBackground");
+    document.getElementsByTagName("header")[0].classList.add("bluredBackground");
+    buttonRestart.addEventListener("click", restartGame);
+    if(gameWin) titleWin.classList.add("afterVisible");	
+    if(elementsPlaced.length == 6 && !gameWin)
+        titleTie.classList.add("afterVisible");
+    buttonRestart.classList.add("afterVisible");
+
+    elementsPlaced.forEach(element => {
+        element.classList.add("notClickable");
+        element.setAttribute("draggable", "false");
+    });
 
 }
 
 function checkEndGame() {
-    if(elementsPlaced.length > 4)
+    const minMovesToWin = 5; 
+    if(elementsPlaced.length >= minMovesToWin)
     {
-        let returnValues = [];
         let validMove, lastMove;
-        
+
         let elementLastPlaced = elementsPlaced[elementsPlaced.length - 1];
         let typeLastPlaced = elementLastPlaced.classList[1];
         let ordenatedElements = ordenateElements(typeLastPlaced);
@@ -150,7 +166,7 @@ function checkEndGame() {
         let lastPos = ordenatedElements[posNext];
         posNext++;
 
-        returnValues = validMovesInit(lastPos, ordenatedElements, posNext);
+        let returnValues = validMovesInit(lastPos, ordenatedElements, posNext);
         validMove = returnValues[0]; lastMove = returnValues[1];
 
         if(validMove)
@@ -289,26 +305,36 @@ function getPositionElement(element) {
     return [positionY, positionX];
 }
 
-function makeNewElement(typeElement) {
-    let imgElement = document.createElement("img");
-    let routeName = "";
-    let className = "";
-
-    if(typeElement == "circle")
-    {
-        routeName = "circle";
-        className = "circle";
+function removeEvents() {
+    for (let i = 0; i < elementsDropables.length; i++) {
+        if(i < elementsDragables.length)
+        {
+            elementsDragables[i].removeEventListener("dragstart", dragStart);
+            elementsDragables[i].removeEventListener("dragend", dragEnd);
+        }
+        elementsDropables[i].removeEventListener("dragenter", dragEnter)
+        elementsDropables[i].removeEventListener("dragover", dragOver);
+        elementsDropables[i].removeEventListener("dragleave", dragLeave);
+        elementsDropables[i].removeEventListener("drop", drop);
     }
-    else {
-        routeName = "x";
-        className = "cross";
+}
+
+function addEvents() {
+    for (let i = 0; i < elementsDropables.length; i++) {
+        if(i < elementsDragables.length)
+        {
+            elementsDragables[i].addEventListener("dragstart", dragStart);
+            elementsDragables[i].addEventListener("dragend", dragEnd);
+        }
+        elementsDropables[i].addEventListener("dragenter", dragEnter)
+        elementsDropables[i].addEventListener("dragover", dragOver);
+        elementsDropables[i].addEventListener("dragleave", dragLeave);
+        elementsDropables[i].addEventListener("drop", drop);
     }
+}
 
-    imgElement.setAttribute("draggable", "true");
-    imgElement.setAttribute(`class", "dragable ${className}`);
-    imgElement.setAttribute(`src", "../Medios/${routeName}.svg`);
-
-    return imgElement
+function restartGame() {
+    location.reload();
 }
 
 

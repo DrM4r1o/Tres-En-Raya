@@ -41,13 +41,22 @@ header > nav > * {
     margin: 20px;
 }
 
-#arrowSelector {
+#arrowSelector  {
+    display: flex;
     width: 100%;
 }
 
 #arrow {
+    position: relative;
     width: 100px;
     height: 100px;
+    animation: 0.8s ease-in-out infinite running jumping;
+}
+
+#afterGame {
+    position: absolute;
+    display: grid;
+    place-items: center;
 }
 
 .row > td {
@@ -115,7 +124,30 @@ header > nav > * {
     display: none;
 }
 
-.titlesVisible {
+.afterRightAnimation {
+    justify-content: end;
+}
+
+.afterLeftAnimation {
+    justify-content: initial;
+}
+
+.buttonEnd {
+    z-index: 100;
+    width: 250px;
+    font-size: 2rem;
+    margin-top: 280px;
+    display: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.buttonEnd:hover {
+    background-color: black;
+    color: white
+}
+
+.afterVisible {
     display: block;
 }
 
@@ -123,32 +155,41 @@ header > nav > * {
     filter: blur(10px);
 }
 
-.animatedArrowRigth {
-    animation: 0.5s linear slideRigth;
-    animation-fill-mode: forwards;
-}
-
-.animatedArrowLeft {
-    animation: 0.5s linear slideLeft;
-    animation-fill-mode: forwards;
+.notClickable {
+    cursor: default;
+    user-select: none;
 }
 
 @keyframes slideLeft {
     from {
-        margin-left: calc(100% - 60px);
+        transform: translateX(870px);
     }
 
     to {
-        margin-left: 0%;
+        transform: translateX(0px);
     }
 }
 
 @keyframes slideRigth {
     from {
-        margin-left: 0%;
+        transform: translateX(0px);
     }
 
     to {
-        margin-left: calc(100% - 100px);
+        transform: translateX(870px);
+    }
+}
+
+@keyframes jumping {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-30px);
+    }
+
+    100% {
+        transform: translateY(0px);
     }
 }

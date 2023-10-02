@@ -11,15 +11,18 @@
     <body>
         <header>
             <div id="arrowSelector">
-                <img id="arrow" class="" src="../Medios/arrow.svg" alt="arrow">
+                <img id="arrow" class="jumping" src="../Medios/arrow.svg" alt="arrow">
             </div>
             <nav>
                 <span class="players">Jugador 1</span>
                 <span class="players">Jugador 2</span>
             </nav>
         </header>
-        <h2 id="win" class="titlesEnd">VICTORIA!</h2>
-        <h2 id="tie" class="titlesEnd">EMPATE!</h2>
+        <div id="afterGame">
+            <h2 id="win" class="titlesEnd">VICTORIA!</h2>
+            <h2 id="tie" class="titlesEnd">EMPATE!</h2>
+            <button id="restart" class="buttonEnd b-generic">Volver a jugar</button>
+        </div>
         <main>
             <div>
                 <div id="circles" class="d-fichasDisponibles dropTarget storeElements" >
