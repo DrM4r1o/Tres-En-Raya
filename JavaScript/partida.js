@@ -139,44 +139,104 @@ function drop(e) {
 function checkEndGame() {
     if(elementsPlaced.length > 4)
     {
+        let returnValues = [];
+        let validMove, lastMove;
+        
         let elementLastPlaced = elementsPlaced[elementsPlaced.length - 1];
         let typeLastPlaced = elementLastPlaced.classList[1];
         let ordenatedElements = ordenateElements(typeLastPlaced);
+        let win = false;
+        let posNext = 0;
+        let lastPos = ordenatedElements[posNext];
+        posNext++;
 
-        console.log(ordenatedElements);
-        let lastPos = ordenatedElements[0];
-        let countCorrect = 0;
-        for(let i = 0; i < ordenatedElements.length - 1; i++)
+        returnValues = validMovesInit(lastPos, ordenatedElements, posNext);
+        validMove = returnValues[0]; lastMove = returnValues[1];
+
+        if(validMove)
         {
-            if( lastPos[0] == ordenatedElements[i + 1][0] && 
-                (lastPos[1] + 1) == ordenatedElements[i + 1][1]
-            ) 
-            {
-                lastPos = ordenatedElements[i + 1];
-                countCorrect++;
-            }
-            if( (lastPos[0] + 1) == ordenatedElements[i + 1][0] &&
-                lastPos[1] == ordenatedElements[i + 1][1]
-            )
-            {
-                lastPos = ordenatedElements[i + 1];
-                countCorrect++;
-            }
-            if( (lastPos[0] + 1) == ordenatedElements[i + 1][0] &&
-                (lastPos[1] + 1) == ordenatedElements[i + 1][1]
-            )
-            {
-                lastPos = ordenatedElements[i + 1];
-                countCorrect++;
-            }
-
-            if(countCorrect == 2)
-            {
-                return true;
-            }
+            lastPos = ordenatedElements[posNext];   
+            posNext++;
+            win = validMovesLast(lastPos, ordenatedElements, posNext, lastMove);
         }
+        return win;
     }
 }
+
+function validMovesInit(lastPos, ordenatedElements, posNext) {
+    let valid = false;
+    let moveDone;
+
+    if( lastPos[0] == ordenatedElements[posNext][0] && 
+        (lastPos[1] + 1) == ordenatedElements[posNext][1] && 
+        !valid
+    ) 
+    {
+        moveDone = "horizontal";
+        valid = true;
+    }
+    if( (lastPos[0] + 1) == ordenatedElements[posNext][0] &&
+        lastPos[1] == ordenatedElements[posNext][1] && 
+        !valid
+    )
+    {
+        valid = true;
+        moveDone = "vertical";
+    }
+    if( (lastPos[0] + 1) == ordenatedElements[posNext][0] &&
+        (lastPos[1] + 1) == ordenatedElements[posNext][1] && 
+        !valid
+    )
+    {
+        valid = true;
+        moveDone = "crossed";
+    }
+    if( (lastPos[0] + 1) == ordenatedElements[posNext][0] &&
+        (lastPos[1] - 1) == ordenatedElements[posNext][1] && 
+        !valid
+    )
+    {
+        valid = true;
+        moveDone = "crossedInverted";
+    }
+    return [valid, moveDone];
+}
+
+function validMovesLast(lastPos, ordenatedElements, posNext, lastMove) {
+    let valid = false;
+    let aviableMoves = ["horizontal","vertical","crossed","crossedInverted"]
+
+    if( lastPos[0] == ordenatedElements[posNext][0] && 
+        (lastPos[1] + 1) == ordenatedElements[posNext][1] && 
+        aviableMoves[0] == lastMove
+    ) 
+    {
+        valid = true;
+    }
+    if( (lastPos[0] + 1) == ordenatedElements[posNext][0] &&
+        lastPos[1] == ordenatedElements[posNext][1] && 
+        aviableMoves[1] == lastMove
+    )
+    {
+        valid = true;
+    }
+    if( (lastPos[0] + 1) == ordenatedElements[posNext][0] &&
+        (lastPos[1] + 1) == ordenatedElements[posNext][1] && 
+        aviableMoves[2] == lastMove
+    )
+    {
+        valid = true;
+    }
+    if( (lastPos[0] + 1) == ordenatedElements[posNext][0] &&
+        (lastPos[1] - 1) == ordenatedElements[posNext][1] && 
+        aviableMoves[3] == lastMove
+    )
+    {
+        valid = true;
+    }
+    return valid;
+}
+
 
 function ordenateElements(typeLastPlaced) {
     let oldArray = [];
@@ -224,9 +284,9 @@ function getElementsWith(array, classSearched) {
 function getPositionElement(element) {
     let table = document.getElementsByTagName("tbody")[0];
     let parentElement = element.parentElement.parentElement;
-    let positionX = Array.from(table.children).indexOf(parentElement);
-    let positionY = Array.from(parentElement.children).indexOf(element.parentElement);
-    return [positionX, positionY];
+    let positionY = Array.from(table.children).indexOf(parentElement);
+    let positionX = Array.from(parentElement.children).indexOf(element.parentElement);
+    return [positionY, positionX];
 }
 
 function makeNewElement(typeElement) {
