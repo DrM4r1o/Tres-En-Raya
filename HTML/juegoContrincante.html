@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Nueva Partida</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="partida">
+        <meta name="author" content="Mario Esparza">
+        <link href="../css/genericos.css" rel="stylesheet" media="all" type="text/css"/>
+        <link href="../css/partida.css" rel="stylesheet" media="all" type="text/css"/>
+    </head>
+    <body>
+        <header>
+            <div id="arrowSelector">
+                <img id="arrow" class="" src="../Medios/arrow.svg" alt="arrow">
+            </div>
+            <nav>
+                <span class="players">Jugador 1</span>
+                <span class="players">Jugador 2</span>
+            </nav>
+        </header>
+        <h2 id="win" class="titlesEnd">VICTORIA!</h2>
+        <h2 id="tie" class="titlesEnd">EMPATE!</h2>
+        <main>
+            <div>
+                <div id="circles" class="d-fichasDisponibles dropTarget storeElements" >
+                    <img draggable="true" class="dragable circle" src="../Medios/circle.svg"></img>
+                    <img draggable="true" class="dragable circle" src="../Medios/circle.svg"></img>
+                    <img draggable="true" class="dragable circle" src="../Medios/circle.svg"></img>
+                </div>
+            </div>
+            <div>
+                <table>
+                    <tr class="row">
+                        <td class="dropTarget dropValid"></td>
+                        <td class="dropTarget dropValid"></td>
+                        <td class="dropTarget dropValid"></td>
+                    </tr>
+                    <tr class="row">
+                        <td class="dropTarget dropValid"></td>
+                        <td class="dropTarget dropValid"></td>
+                        <td class="dropTarget dropValid"></td>
+                    </tr>
+                    <tr class="row">
+                        <td class="dropTarget dropValid"></td>
+                        <td class="dropTarget dropValid"></td>
+                        <td class="dropTarget dropValid"></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <div id="crosses" class="d-fichasDisponibles dropTarget storeElements">
+                    <img draggable="true" class="dragable cross" src="../Medios/x.svg"></img>
+                    <img draggable="true" class="dragable cross" src="../Medios/x.svg"></img>
+                    <img draggable="true" class="dragable cross" src="../Medios/x.svg"></img>
+                </div>
+            </div>
+        </main>
+    </body>
+    <script src="../JavaScript/partida.js"></script>
+</html>
