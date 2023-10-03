@@ -262,18 +262,18 @@ function ordenateElements(typeLastPlaced) {
     else
         oldArray = positionPlacedCross;
 
-    let minor = oldArray[0];
+    let max = oldArray[0];
     for (let i = 0; i < oldArray.length - 1; i++) {
-        if(minor[0] > oldArray[i + 1][0])
-        {
-            arrayOrdenated.push(minor);
-            minor = oldArray[i + 1];
-        } else
+        if(max[0] > oldArray[i + 1][0])
         {
             arrayOrdenated.push(oldArray[i + 1]);
+        } else
+        {
+            arrayOrdenated.push(max);
+            max = oldArray[i + 1];
         }
     }
-    arrayOrdenated.unshift(minor);
+    arrayOrdenated.push(max);
     return arrayOrdenated;
 }
 
