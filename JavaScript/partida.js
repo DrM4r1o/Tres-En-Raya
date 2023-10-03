@@ -266,7 +266,7 @@ function ordenateElements(typeLastPlaced) {
     for (let i = 0; i < oldArray.length - 1; i++) {
         if(minor[0] > oldArray[i + 1][0])
         {
-            arrayOrdenated.unshift(minor);
+            arrayOrdenated.push(minor);
             minor = oldArray[i + 1];
         } else
         {
